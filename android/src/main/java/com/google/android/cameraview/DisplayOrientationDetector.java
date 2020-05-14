@@ -22,6 +22,8 @@ import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 
+import org.reactnative.camera.R;
+
 
 /**
  * Monitors the value returned from {@link Display#getRotation()}.
@@ -47,6 +49,7 @@ abstract class DisplayOrientationDetector {
     private int mLastKnownDeviceOrientation = 0;
 
     public DisplayOrientationDetector(Context context) {
+        final boolean isPhone = context.getResources().getBoolean(R.bool.is_phone);
         mOrientationEventListener = new OrientationEventListener(context) {
 
             /** This is either Surface.Rotation_0, _90, _180, _270, or -1 (invalid). */
@@ -55,7 +58,8 @@ abstract class DisplayOrientationDetector {
             @Override
             public void onOrientationChanged(int orientation) {
                 if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN ||
-                        mDisplay == null) {
+                        mDisplay == null ||
+                        isPhone) {
                     return;
                 }
                 boolean hasChanged = false;
